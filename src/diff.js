@@ -38,4 +38,4 @@ export {
   stateRemove,
   stateSame,
   stateChange,
-}
+};
