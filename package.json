@@ -5,7 +5,8 @@
   "description": "gendiff",
   "main": "./src/index.js",
   "scripts": {
-    "test": "npx jest"
+    "test": "npx jest",
+    "coverage": "npx jest --coverageReporters lcov"
   },
   "bin": {
     "gendiff": "bin/gendiff.js"
