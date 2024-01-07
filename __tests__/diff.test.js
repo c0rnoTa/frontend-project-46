@@ -16,7 +16,7 @@ beforeEach(() => {
   obj2 = parseToObject(getFixturePath('obj2.json'));
 });
 
-test('Same', () => {
+test('GenDiff', () => {
   expect(diff.genDiff(obj1, obj2)).toEqual(
     [
       [diff.stateRemove, ['follow', false]],
