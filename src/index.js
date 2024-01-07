@@ -1,8 +1,8 @@
-import parseToString from './parser.js';
+import parseToObject from './parser.js';
 import * as diff from './diff.js';
 
 export default (filepath1, filepath2) => {
-  const result = diff.genDiff(parseToString(filepath1), parseToString(filepath2));
+  const result = diff.genDiff(parseToObject(filepath1), parseToObject(filepath2));
   console.log('{');
   result.forEach(([state, [key, value]]) => {
     switch (state) {

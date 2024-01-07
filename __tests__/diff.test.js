@@ -1,20 +1,30 @@
+/* eslint-disable no-underscore-dangle, import/no-extraneous-dependencies */
+
+import { fileURLToPath } from 'url';
+import * as path from 'path';
+
+import parseToObject from '../src/parser.js';
 import * as diff from '../src/diff.js';
 
-beforeEach(() => {
-  const obj1 = {
-    host: 'hexlet.io',
-    // timeout: 50,
-    // proxy: '123.234.53.22',
-    // follow: false,
-  };
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-  const obj2 = {
-    // timeout: 20,
-    verbose: true,
-    host: 'hexlet.io',
-  };
+let obj1 = {};
+let obj2 = {};
+
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+
+beforeEach(() => {
+  obj1 = parseToObject(getFixturePath('obj1.json'));
+  obj2 = parseToObject(getFixturePath('obj2.json'));
 });
 
 test('Same', () => {
-  expect(diff.genDiff(obj1, obj2).toEqual('bla'));
+  expect(diff.genDiff(obj1, obj2)).toEqual(
+    [
+      [diff.stateRemove, ['follow', false]],
+      [diff.stateSame, ['host', 'hexlet.io']],
+      [diff.stateChange, ['timeout', [50, 20]]],
+      [diff.stateAdd, ['verbose', true]],
+    ],
+  );
 });
