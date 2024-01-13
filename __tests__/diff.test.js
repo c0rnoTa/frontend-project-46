@@ -1,5 +1,5 @@
 import { fileURLToPath } from 'url';
-import * as path from 'path';
+import path from 'path';
 
 import parseToObject from '../src/parser.js';
 import * as diff from '../src/diff.js';
@@ -11,14 +11,28 @@ let obj1 = {};
 let obj2 = {};
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const parseFileToObject = (fixtureName) => parseToObject(getFixturePath(fixtureName));
 
-beforeEach(() => {
+test('JSON diiff', () => {
   // Чтение объектов, а не сами объекты - это нормально?
-  obj1 = parseToObject(getFixturePath('obj1.json'));
-  obj2 = parseToObject(getFixturePath('obj2.json'));
+  obj1 = parseFileToObject('obj1.json');
+  obj2 = parseFileToObject('obj2.json');
+
+  expect(diff.genDiff(obj1, obj2)).toEqual(
+    [
+      [diff.stateRemove, ['follow', false]],
+      [diff.stateSame, ['host', 'hexlet.io']],
+      [diff.stateChange, ['timeout', [50, 20]]],
+      [diff.stateAdd, ['verbose', true]],
+    ],
+  );
 });
 
-test('GenDiff', () => {
+test('YAML diiff', () => {
+  // Чтение объектов, а не сами объекты - это нормально?
+  obj1 = parseFileToObject('obj1.yaml');
+  obj2 = parseFileToObject('obj2.yml');
+
   expect(diff.genDiff(obj1, obj2)).toEqual(
     [
       [diff.stateRemove, ['follow', false]],

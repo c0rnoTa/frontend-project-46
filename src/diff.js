@@ -27,6 +27,7 @@ const genDiff = (obj1, obj2) => {
     if (!(key in obj2)) {
       return removeKey(key, value);
     }
+
     return compareValues(key, value, obj1[key]);
   });
   return diff;
