@@ -15,8 +15,8 @@ const parseFileToObject = (fixtureName) => parseToObject(getFixturePath(fixtureN
 
 test('JSON diff', () => {
   // Чтение объектов, а не сами объекты - это нормально?
-  obj1 = parseFileToObject('obj1.json');
-  obj2 = parseFileToObject('obj2.json');
+  obj1 = parseFileToObject('file1.json');
+  obj2 = parseFileToObject('file2.json');
 
   expect(diff.genDiff(obj1, obj2)).toEqual(
     [

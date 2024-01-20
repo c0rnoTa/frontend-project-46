@@ -8,6 +8,8 @@ const stateChanged = 'changed';
 const typeNested = 'nested';
 const typeLeaf = 'leaf';
 
+const isObject = (value) => value instanceof Object;
+
 const newLeafKey = (state, key, value) => ({
   state,
   name: key,
@@ -27,7 +29,7 @@ const newNestedKey = (state, key, value) => ({
 });
 
 const newKey = (state, key, value) => {
-  if (value instanceof Object) {
+  if (isObject(value)) {
     return newNestedKey(state, key, value);
   }
   return newLeafKey(state, key, value);
@@ -37,17 +39,12 @@ const compareValues = (key, beforeValue, afterValue) => {
   if (afterValue === beforeValue) {
     return newKey(stateUnchanged, key, beforeValue);
   }
+
   return {
     state: stateChanged,
     name: key,
-    oldData: {
-      type: typeLeaf,
-      value: beforeValue,
-    },
-    newData: {
-      type: typeLeaf,
-      value: afterValue,
-    },
+    oldData: isObject(beforeValue) ? { type: typeNested, value: genDiff(beforeValue, beforeValue) } : { type: typeLeaf, value: beforeValue },
+    newData: isObject(afterValue) ? { type: typeNested, value: genDiff(afterValue, afterValue) } : { type: typeLeaf, value: afterValue },
   };
 };
 
