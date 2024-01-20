@@ -1,30 +1,14 @@
 import _ from 'lodash';
 
-const stateAdd = '+';
-const stateRemove = '-';
-const stateSame = '=';
-const stateChange = 'change';
+const stateAdd = 'added';
+const stateRemove = 'remove';
+const stateUnchanged = 'unchanged';
+const stateChanged = 'changed';
 
-const typeNode = 'node';
+const typeNested = 'nested';
 const typeLeaf = 'leaf';
 
-// const getAstNode = (name, state, oldType, oldValue, newType, newValue) => {
-//   const getAstValue = (type, value) => (
-//     {
-//       type,
-//       value,
-//     });
-
-//   return {
-//     name,
-//     state,
-//     old: getAstValue(oldType, oldValue),
-//     new: getAstValue(newType, newValue),
-//   };
-// }
-
-// Узел добавлен
-const newSimpleKey = (state, key, value) => ({
+const newLeafKey = (state, key, value) => ({
   state,
   name: key,
   data: {
@@ -33,13 +17,28 @@ const newSimpleKey = (state, key, value) => ({
   },
 });
 
-// Узел присутствует в исходном и целевом объекте
+const newNestedKey = (state, key, value) => ({
+  state,
+  name: key,
+  data: {
+    type: typeNested,
+    value: genDiff(value, value),
+  },
+});
+
+const newKey = (state, key, value) => {
+  if (value instanceof Object) {
+    return newNestedKey(state, key, value);
+  }
+  return newLeafKey(state, key, value);
+};
+
 const compareValues = (key, beforeValue, afterValue) => {
   if (afterValue === beforeValue) {
-    return newSimpleKey(stateSame, key, beforeValue);
+    return newKey(stateUnchanged, key, beforeValue);
   }
   return {
-    state: stateChange,
+    state: stateChanged,
     name: key,
     oldData: {
       type: typeLeaf,
@@ -58,10 +57,10 @@ const genDiff = (obj1, obj2) => {
   res.sort();
   const diff = res.map(([key, value]) => {
     if (!(key in obj1)) {
-      return newSimpleKey(stateAdd, key, value);
+      return newKey(stateAdd, key, value);
     }
     if (!(key in obj2)) {
-      return newSimpleKey(stateRemove, key, value);
+      return newKey(stateRemove, key, value);
     }
 
     return compareValues(key, obj1[key], value);
@@ -73,8 +72,8 @@ export {
   genDiff,
   stateAdd,
   stateRemove,
-  stateSame,
-  stateChange,
-  typeNode,
+  stateUnchanged,
+  stateChanged,
+  typeNested,
   typeLeaf,
 };
