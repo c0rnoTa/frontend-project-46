@@ -119,14 +119,33 @@ test('Simple recursion diff', () => {
         name: 'complexKey',
         data: {
           type: diff.typeNested,
-          value: [{
-            state: diff.stateUnchanged,
-            name: 'foo',
-            data: {
-              type: diff.typeLeaf,
-              value: 'bar',
+          value: [
+            {
+              state: diff.stateUnchanged,
+              name: 'doo',
+              data: {
+                type: diff.typeNested,
+                value: [
+                  {
+                    state: diff.stateUnchanged,
+                    name: 'id',
+                    data: {
+                      type: diff.typeLeaf,
+                      value: 2,
+                    },
+                  },
+                ],
+              },
             },
-          }],
+            {
+              state: diff.stateUnchanged,
+              name: 'foo',
+              data: {
+                type: diff.typeLeaf,
+                value: 'bar',
+              },
+            },
+          ],
         },
       },
       {

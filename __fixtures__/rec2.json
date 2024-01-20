@@ -3,6 +3,9 @@
   "verbose": true,
   "host": "hexlet.io",
   "complexKey": {
-    "foo": "bar"
+    "foo": "bar",
+    "doo": {
+      "id": 2
+    }
   }
 }
