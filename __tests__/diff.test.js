@@ -20,10 +20,42 @@ test('JSON diiff', () => {
 
   expect(diff.genDiff(obj1, obj2)).toEqual(
     [
-      [diff.stateRemove, ['follow', false]],
-      [diff.stateSame, ['host', 'hexlet.io']],
-      [diff.stateChange, ['timeout', [50, 20]]],
-      [diff.stateAdd, ['verbose', true]],
+      {
+        state: diff.stateRemove,
+        name: 'follow',
+        data: {
+          type: diff.typeLeaf,
+          value: false,
+        },
+      },
+      {
+        state: diff.stateSame,
+        name: 'host',
+        data: {
+          type: diff.typeLeaf,
+          value: 'hexlet.io',
+        },
+      },
+      {
+        state: diff.stateChange,
+        name: 'timeout',
+        oldData: {
+          type: diff.typeLeaf,
+          value: 50,
+        },
+        newData: {
+          type: diff.typeLeaf,
+          value: 20,
+        },
+      },
+      {
+        state: diff.stateAdd,
+        name: 'verbose',
+        data: {
+          type: diff.typeLeaf,
+          value: true,
+        },
+      },
     ],
   );
 });
@@ -35,10 +67,42 @@ test('YAML diiff', () => {
 
   expect(diff.genDiff(obj1, obj2)).toEqual(
     [
-      [diff.stateRemove, ['follow', false]],
-      [diff.stateSame, ['host', 'hexlet.io']],
-      [diff.stateChange, ['timeout', [50, 20]]],
-      [diff.stateAdd, ['verbose', true]],
+      {
+        state: diff.stateRemove,
+        name: 'follow',
+        data: {
+          type: diff.typeLeaf,
+          value: false,
+        },
+      },
+      {
+        state: diff.stateSame,
+        name: 'host',
+        data: {
+          type: diff.typeLeaf,
+          value: 'hexlet.io',
+        },
+      },
+      {
+        state: diff.stateChange,
+        name: 'timeout',
+        oldData: {
+          type: diff.typeLeaf,
+          value: 50,
+        },
+        newData: {
+          type: diff.typeLeaf,
+          value: 20,
+        },
+      },
+      {
+        state: diff.stateAdd,
+        name: 'verbose',
+        data: {
+          type: diff.typeLeaf,
+          value: true,
+        },
+      },
     ],
   );
 });

@@ -1,19 +1,55 @@
 import _ from 'lodash';
 
-const stateAdd = 'add';
-const stateRemove = 'remove';
-const stateSame = 'same';
+const stateAdd = '+';
+const stateRemove = '-';
+const stateSame = '=';
 const stateChange = 'change';
 
-const addKey = (key, value) => [stateAdd, [key, value]];
+const typeNode = 'node';
+const typeLeaf = 'leaf';
 
-const removeKey = (key, value) => [stateRemove, [key, value]];
+// const getAstNode = (name, state, oldType, oldValue, newType, newValue) => {
+//   const getAstValue = (type, value) => (
+//     {
+//       type,
+//       value,
+//     });
 
-const compareValues = (key, newValue, oldValue) => {
-  if (newValue === oldValue) {
-    return [stateSame, [key, newValue]];
+//   return {
+//     name,
+//     state,
+//     old: getAstValue(oldType, oldValue),
+//     new: getAstValue(newType, newValue),
+//   };
+// }
+
+// Узел добавлен
+const newSimpleKey = (state, key, value) => ({
+  state,
+  name: key,
+  data: {
+    type: typeLeaf,
+    value,
+  },
+});
+
+// Узел присутствует в исходном и целевом объекте
+const compareValues = (key, beforeValue, afterValue) => {
+  if (afterValue === beforeValue) {
+    return newSimpleKey(stateSame, key, beforeValue);
   }
-  return [stateChange, [key, [oldValue, newValue]]];
+  return {
+    state: stateChange,
+    name: key,
+    oldData: {
+      type: typeLeaf,
+      value: beforeValue,
+    },
+    newData: {
+      type: typeLeaf,
+      value: afterValue,
+    },
+  };
 };
 
 const genDiff = (obj1, obj2) => {
@@ -22,13 +58,13 @@ const genDiff = (obj1, obj2) => {
   res.sort();
   const diff = res.map(([key, value]) => {
     if (!(key in obj1)) {
-      return addKey(key, value);
+      return newSimpleKey(stateAdd, key, value);
     }
     if (!(key in obj2)) {
-      return removeKey(key, value);
+      return newSimpleKey(stateRemove, key, value);
     }
 
-    return compareValues(key, value, obj1[key]);
+    return compareValues(key, obj1[key], value);
   });
   return diff;
 };
@@ -39,4 +75,6 @@ export {
   stateRemove,
   stateSame,
   stateChange,
+  typeNode,
+  typeLeaf,
 };
