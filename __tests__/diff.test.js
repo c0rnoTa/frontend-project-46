@@ -3,8 +3,8 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 import parseToObject from '../src/parser.js';
-import * as diff from '../src/diff.js';
-import * as formats from '../src/index.js';
+import { genDiff } from '../src/diff.js';
+import getStylish from '../src/formaters/stylish.js';
 
 let obj1 = {};
 let obj2 = {};
@@ -21,8 +21,8 @@ test('Diff flat JSON files in stylish output', () => {
   obj2 = parseFileToObject('obj2.json');
 
   result = readFileSync(getFixturePath('result_flat.stylish')).toString();
-  ast = diff.genDiff(obj1, obj2);
-  expect(formats.getStylish(ast)).toEqual(result);
+  ast = genDiff(obj1, obj2);
+  expect(getStylish(ast)).toEqual(result);
 });
 
 test('Diff flat YAML files in stylish output', () => {
@@ -30,9 +30,9 @@ test('Diff flat YAML files in stylish output', () => {
   obj2 = parseFileToObject('obj2.yml');
 
   result = readFileSync(getFixturePath('result_flat.stylish')).toString();
-  ast = diff.genDiff(obj1, obj2);
+  ast = genDiff(obj1, obj2);
 
-  expect(formats.getStylish(ast)).toEqual(result);
+  expect(getStylish(ast)).toEqual(result);
 });
 
 test('Diff nested JSON files in stylish output', () => {
@@ -40,8 +40,8 @@ test('Diff nested JSON files in stylish output', () => {
   obj2 = parseFileToObject('file2.json');
 
   result = readFileSync(getFixturePath('result_nested.stylish')).toString();
-  ast = diff.genDiff(obj1, obj2);
-  expect(formats.getStylish(ast)).toEqual(result);
+  ast = genDiff(obj1, obj2);
+  expect(getStylish(ast)).toEqual(result);
 });
 
 test('Diff nested YAML files in stylish output', () => {
@@ -49,6 +49,6 @@ test('Diff nested YAML files in stylish output', () => {
   obj2 = parseFileToObject('file2.yml');
 
   result = readFileSync(getFixturePath('result_nested.stylish')).toString();
-  ast = diff.genDiff(obj1, obj2);
-  expect(formats.getStylish(ast)).toEqual(result);
+  ast = genDiff(obj1, obj2);
+  expect(getStylish(ast)).toEqual(result);
 });
