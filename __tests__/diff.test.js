@@ -17,7 +17,6 @@ const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', 
 const parseFileToObject = (fixtureName) => parseToObject(getFixturePath(fixtureName));
 
 test('Diff flat JSON files in stylish output', () => {
-  // Чтение объектов, а не сами объекты - это нормально?
   obj1 = parseFileToObject('obj1.json');
   obj2 = parseFileToObject('obj2.json');
 
@@ -27,12 +26,20 @@ test('Diff flat JSON files in stylish output', () => {
 });
 
 test('Diff flat YAML files in stylish output', () => {
-  // Чтение объектов, а не сами объекты - это нормально?
   obj1 = parseFileToObject('obj1.yaml');
   obj2 = parseFileToObject('obj2.yml');
 
   result = readFileSync(getFixturePath('result_flat.stylish')).toString();
   ast = diff.genDiff(obj1, obj2);
 
+  expect(formats.getStylish(ast)).toEqual(result);
+});
+
+test('Diff nested JSON files in stylish output', () => {
+  obj1 = parseFileToObject('file1.json');
+  obj2 = parseFileToObject('file2.json');
+
+  result = readFileSync(getFixturePath('result_nested.stylish')).toString();
+  ast = diff.genDiff(obj1, obj2);
   expect(formats.getStylish(ast)).toEqual(result);
 });
