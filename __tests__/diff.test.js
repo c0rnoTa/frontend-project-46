@@ -43,3 +43,12 @@ test('Diff nested JSON files in stylish output', () => {
   ast = diff.genDiff(obj1, obj2);
   expect(formats.getStylish(ast)).toEqual(result);
 });
+
+test('Diff nested YAML files in stylish output', () => {
+  obj1 = parseFileToObject('file1.yaml');
+  obj2 = parseFileToObject('file2.yml');
+
+  result = readFileSync(getFixturePath('result_nested.stylish')).toString();
+  ast = diff.genDiff(obj1, obj2);
+  expect(formats.getStylish(ast)).toEqual(result);
+});
