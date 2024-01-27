@@ -7,18 +7,18 @@ const getStylish = (ast) => {
       let str = '';
       switch (node.state) {
         case diff.stateAdd:
-          str = `  + ${node.key}: ${node.data.value}`;
+          str = `  + ${node.key}: ${(node.data.type === diff.typeNested) ? getStylish(node.data.value) : node.data.value}`;
           break;
         case diff.stateRemove:
-          str = `  - ${node.key}: ${node.data.value}`;
+          str = `  - ${node.key}: ${(node.data.type === diff.typeNested) ? getStylish(node.data.value) : node.data.value}`;
           break;
         case diff.stateChanged:
-          str = `  - ${node.key}: ${node.oldData.value}`;
+          str = `  - ${node.key}: ${(node.oldData.type === diff.typeNested) ? getStylish(node.oldData.value) : node.oldData.value}`;
           str += '\n';
-          str += `  + ${node.key}: ${node.newData.value}`;
+          str += `  + ${node.key}: ${(node.newData.type === diff.typeNested) ? getStylish(node.newData.value) : node.newData.value}`;
           break;
         default:
-          str = `    ${node.key}: ${node.data.value}`;
+          str = `    ${node.key}: ${(node.data.type === diff.typeNested) ? getStylish(node.data.value) : node.data.value}`;
       }
       return str;
     },
