@@ -14,7 +14,7 @@ const getFileContent = (filepath) => readFileSync(getAbsoluteFilePath(filepath))
 const parseJsonFile = (filepath) => JSON.parse(getFileContent(filepath));
 const parseYamlFile = (filepath) => yaml.load(getFileContent(filepath));
 
-// Читает файл и возвращает контент в видео объекта.
+// Читает файл и возвращает контент в виде объекта.
 export default (filepath) => {
   const fileExtension = getFileExtension(filepath);
   switch (fileExtension) {
