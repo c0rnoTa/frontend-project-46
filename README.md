@@ -13,3 +13,6 @@ Hexlet tests and linter status
 
 ### gendiff YAML
 [![asciicast](https://asciinema.org/a/z2GoaBOrr2qreDEuJbkAtDUET.svg)](https://asciinema.org/a/z2GoaBOrr2qreDEuJbkAtDUET)
+
+### gediff stylish format
+[![asciicast](https://asciinema.org/a/nyquPJyGNoQgQf1LF0c63cGa4.svg)](https://asciinema.org/a/nyquPJyGNoQgQf1LF0c63cGa4)
