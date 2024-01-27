@@ -7,10 +7,8 @@ const printDiff = (filepath1, filepath2, opts) => {
   // console.log(JSON.stringify(ast, null, 2));
   switch (opts.format) {
     case 'stylish':
-      console.log(getStylish(ast));
-      break;
     default:
-      console.log(`Unsupported formater ${opts.format}`);
+      console.log(getStylish(ast));
   }
 };
 
