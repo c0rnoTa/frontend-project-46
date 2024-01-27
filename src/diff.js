@@ -1,66 +1,48 @@
 import _ from 'lodash';
 
+// Состояния узлов в AST.
 const stateAdd = 'added';
 const stateRemove = 'remove';
 const stateUnchanged = 'unchanged';
 const stateChanged = 'changed';
 
+// Типы узлов в AST.
 const typeNested = 'nested';
 const typeLeaf = 'leaf';
 
-const isObject = (value) => value instanceof Object;
+// const isObject = (value) => value instanceof Object;
 
-const newLeafKey = (state, key, value) => ({
+const newNode = (state, key, data) => ({
   state,
-  name: key,
-  data: {
-    type: typeLeaf,
-    value,
-  },
+  key,
+  data,
 });
-
-const newNestedKey = (state, key, value) => ({
-  state,
-  name: key,
-  data: {
-    type: typeNested,
-    value: genDiff(value, value),
-  },
-});
-
-const newKey = (state, key, value) => {
-  if (isObject(value)) {
-    return newNestedKey(state, key, value);
-  }
-  return newLeafKey(state, key, value);
-};
 
 const compareValues = (key, beforeValue, afterValue) => {
   if (afterValue === beforeValue) {
-    return newKey(stateUnchanged, key, beforeValue);
+    return newNode(stateUnchanged, key, { type: typeLeaf, value: beforeValue });
   }
 
   return {
     state: stateChanged,
-    name: key,
-    oldData: isObject(beforeValue) ? { type: typeNested, value: genDiff(beforeValue, beforeValue) } : { type: typeLeaf, value: beforeValue },
-    newData: isObject(afterValue) ? { type: typeNested, value: genDiff(afterValue, afterValue) } : { type: typeLeaf, value: afterValue },
+    key,
+    oldData: { type: typeLeaf, value: beforeValue },
+    newData: { type: typeLeaf, value: afterValue },
   };
 };
 
 const genDiff = (obj1, obj2) => {
   const res = _.entries({ ...obj1, ...obj2 });
-  // const res = _.entries(_.merge(obj1, obj2));
   res.sort();
   const diff = res.map(([key, value]) => {
     if (!(key in obj1)) {
-      return newKey(stateAdd, key, value);
+      return newNode(stateAdd, key, { type: typeLeaf, value });
     }
     if (!(key in obj2)) {
-      return newKey(stateRemove, key, value);
+      return newNode(stateRemove, key, { type: typeLeaf, value });
     }
 
-    return compareValues(key, obj1[key], value);
+    return compareValues(key, obj1[key], obj2[key]);
   });
   return diff;
 };

@@ -1,39 +1,36 @@
 import parseToObject from './parser.js';
 import * as diff from './diff.js';
 
-const printStylish = (ast) => {
-  console.log('{');
-  ast.forEach((node) => {
-    switch (node.state) {
-      case diff.stateAdd:
-        if (node.data.type === diff.typeNested) {
-          console.log(`  + ${node.name}:`);
-          printStylish(node.data.value);
-          return;
-        }
-        console.log(`  + ${node.name}: ${node.data.value}`);
-        break;
-      case diff.stateRemove:
-        console.log(`  - ${node.name}: ${node.data.value}`);
-        break;
-      case diff.stateChanged:
-        console.log(`  - ${node.name}: ${node.oldData.value}`);
-        console.log(`  + ${node.name}: ${node.newData.value}`);
-        break;
-      default:
-        if (node.data.type === diff.typeNested) {
-          console.log(`    ${node.name}:`);
-          printStylish(node.data.value);
-          return;
-        }
-        console.log(`    ${node.name}: ${node.data.value}`);
-    }
-  });
-  console.log('}');
+const getStylish = (ast) => {
+  const result = ast.map(
+    (node) => {
+      let str = '';
+      switch (node.state) {
+        case diff.stateAdd:
+          str = `  + ${node.key}: ${node.data.value}`;
+          break;
+        case diff.stateRemove:
+          str = `  - ${node.key}: ${node.data.value}`;
+          break;
+        case diff.stateChanged:
+          str = `  - ${node.key}: ${node.oldData.value}`;
+          str += '\n';
+          str += `  + ${node.key}: ${node.newData.value}`;
+          break;
+        default:
+          str = `    ${node.key}: ${node.data.value}`;
+      }
+      return str;
+    },
+  ).join('\n');
+  return `{\n${result}\n}`;
 };
 
-export default (filepath1, filepath2) => {
-  const result = diff.genDiff(parseToObject(filepath1), parseToObject(filepath2));
-  // console.log(JSON.stringify(result, null, 2));
-  printStylish(result);
+const printDiff = (filepath1, filepath2) => {
+  const ast = diff.genDiff(parseToObject(filepath1), parseToObject(filepath2));
+  // console.log(JSON.stringify(ast, null, 2));
+  console.log(getStylish(ast));
 };
+
+export { getStylish };
+export default printDiff;
