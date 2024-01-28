@@ -5,8 +5,7 @@ const indentCount = 4;
 
 const getStylish = (ast, level = 1) => {
   const fmtString = (node, lvl, char = ' ', attr = 'value') => {
-    let result = '';
-    result += `${indent.repeat(indentCount * lvl - 2)}${char} ${node.key}: `;
+    let result = `${indent.repeat(indentCount * lvl - 2)}${char} ${node.key}: `;
     result += ((node[attr] instanceof Object) ? getStylish(node[attr], lvl + 1) : node[attr]);
     return result;
   };
