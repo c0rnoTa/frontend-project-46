@@ -6,14 +6,10 @@ const getStylish = (ast, level = 1) => {
   const indentCount = 4;
 
   // Форматирует строку с отступами текущего уровня вложенности и спецсиволом.
-  const fmtString = (node, lvl, char = ' ', keyName = 'data') => {
+  const fmtString = (node, lvl, char = ' ', attr = 'value') => {
     let result = '';
     result += `${indent.repeat(indentCount * lvl - 2)}${char} ${node.key}: `;
-    if (node[keyName].type === diff.typeNested) {
-      result += getStylish(node[keyName].value, lvl + 1);
-    } else {
-      result += node[keyName].value;
-    }
+    result += ((node[attr] instanceof Object) ? getStylish(node[attr], lvl + 1) : node[attr]);
     return result;
   };
 

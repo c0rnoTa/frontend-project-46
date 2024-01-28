@@ -6,20 +6,8 @@ const stateRemove = 'remove';
 const stateUnchanged = 'unchanged';
 const stateChanged = 'changed';
 
-// Типы узлов в AST.
-const typeNested = 'nested';
-const typeLeaf = 'leaf';
-
 const isObject = (value) => value instanceof Object;
-
-const newNode = (state, key, value) => ({
-  state,
-  key,
-  data: {
-    type: ((isObject(value)) ? typeNested : typeLeaf),
-    value,
-  },
-});
+const newNode = (state, key, value) => ({ state, key, value });
 
 const genDiff = (obj1, obj2) => {
   const res = _.entries({ ...obj1, ...obj2 });
@@ -27,17 +15,11 @@ const genDiff = (obj1, obj2) => {
   const diff = res.map(([key, value]) => {
     // Был ли добавлен ключ
     if (!(key in obj1)) {
-      if (isObject(value)) {
-        return newNode(stateAdd, key, genDiff(value, value));
-      }
-      return newNode(stateAdd, key, value);
+      return newNode(stateAdd, key, (isObject(value) ? genDiff(value, value) : value));
     }
     // Был ли удалён ключ
     if (!(key in obj2)) {
-      if (isObject(value)) {
-        return newNode(stateRemove, key, genDiff(value, value));
-      }
-      return newNode(stateRemove, key, value);
+      return newNode(stateRemove, key, (isObject(value) ? genDiff(value, value) : value));
     }
 
     // Ключ есть в исходном и в целевом объекте
@@ -49,26 +31,11 @@ const genDiff = (obj1, obj2) => {
     if (obj1[key] !== obj2[key]) {
       const beforeValue = obj1[key];
       const afterValue = obj2[key];
-      let oldData = {};
-      let newData = {};
-
-      if (isObject(beforeValue)) {
-        oldData = { type: typeNested, value: genDiff(beforeValue, beforeValue) };
-      } else {
-        oldData = { type: typeLeaf, value: beforeValue };
-      }
-
-      if (isObject(afterValue)) {
-        newData = { type: typeNested, value: genDiff(afterValue, afterValue) };
-      } else {
-        newData = { type: typeLeaf, value: afterValue };
-      }
-
       return {
         state: stateChanged,
         key,
-        oldData,
-        newData,
+        oldData: (isObject(beforeValue) ? genDiff(beforeValue, beforeValue) : beforeValue),
+        newData: (isObject(afterValue) ? genDiff(afterValue, afterValue) : afterValue),
       };
     }
 
@@ -84,6 +51,4 @@ export {
   stateRemove,
   stateUnchanged,
   stateChanged,
-  typeNested,
-  typeLeaf,
 };
