@@ -9,7 +9,7 @@ program
   .description('Compares two configuration files and shows a difference.')
   .argument('<filepath1>')
   .argument('<filepath2>')
-  .option('-f --format <type>', 'output format', 'stylish')
+  .option('-f --format <type>', 'output format: stylish, plain', 'stylish')
   .action(parser);
 
 program.parse();
