@@ -1,5 +1,5 @@
 import parseToObject from './parser.js';
-import { genDiff } from './diff.js';
+import genDiff from './diff.js';
 import getFormatter from './formatters/index.js';
 
 const printDiff = (filepath1, filepath2, opts) => {

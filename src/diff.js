@@ -46,9 +46,10 @@ const genDiff = (obj1, obj2) => {
 };
 
 export {
-  genDiff,
   stateAdd,
   stateRemove,
   stateUnchanged,
   stateChanged,
 };
+
+export default genDiff;

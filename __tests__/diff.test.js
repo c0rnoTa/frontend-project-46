@@ -3,7 +3,7 @@ import path from 'path';
 import { readFileSync } from 'fs';
 
 import parseToObject from '../src/parser.js';
-import { genDiff } from '../src/diff.js';
+import genDiff from '../src/diff.js';
 import getFormatter from '../src/formatters/index.js';
 
 let obj1 = {};
