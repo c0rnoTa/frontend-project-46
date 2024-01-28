@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import parseToObject from '../src/parser.js';
 import { genDiff } from '../src/diff.js';
 import getStylish from '../src/formaters/stylish.js';
+import getPlain from '../src/formaters/plain.js';
 
 let obj1 = {};
 let obj2 = {};
@@ -51,4 +52,13 @@ test('Diff nested YAML files in stylish output', () => {
   result = readFileSync(getFixturePath('result_nested.stylish')).toString();
   ast = genDiff(obj1, obj2);
   expect(getStylish(ast)).toEqual(result);
+});
+
+test('Diff nested files in plain output', () => {
+  obj1 = parseFileToObject('file1.yaml');
+  obj2 = parseFileToObject('file2.json');
+
+  result = readFileSync(getFixturePath('result_nested.plain')).toString();
+  ast = genDiff(obj1, obj2);
+  expect(getPlain(ast)).toEqual(result);
 });
