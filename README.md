@@ -16,3 +16,6 @@ Hexlet tests and linter status
 
 ### gediff stylish format
 [![asciicast](https://asciinema.org/a/nyquPJyGNoQgQf1LF0c63cGa4.svg)](https://asciinema.org/a/nyquPJyGNoQgQf1LF0c63cGa4)
+
+### gediff plain format
+[![asciicast](https://asciinema.org/a/sxtqz4imseduvaDgq5rJ1XvO1.svg)](https://asciinema.org/a/sxtqz4imseduvaDgq5rJ1XvO1)
