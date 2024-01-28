@@ -14,27 +14,20 @@ const fmtKey = (children, parent = undefined) => ((parent === undefined) ? child
 
 // Форматер результата сравнения в Plain.
 const getPlain = (ast, parent = undefined) => {
-  const result = ast.map(
-    (node) => {
-      let str = '';
+  const result = ast
+    .filter((node) => (node.state !== diff.stateUnchanged) || (node.value instanceof Object))
+    .map((node) => {
       switch (node.state) {
         case diff.stateAdd:
-          str = `Property '${fmtKey(node.key, parent)}' was added with value: ${fmtValue(node.value)}`;
-          break;
+          return `Property '${fmtKey(node.key, parent)}' was added with value: ${fmtValue(node.value)}`;
         case diff.stateRemove:
-          str = `Property '${fmtKey(node.key, parent)}' was removed`;
-          break;
+          return `Property '${fmtKey(node.key, parent)}' was removed`;
         case diff.stateChanged:
-          str = `Property '${fmtKey(node.key, parent)}' was updated. From ${fmtValue(node.oldData)} to ${fmtValue(node.newData)}`;
-          break;
+          return `Property '${fmtKey(node.key, parent)}' was updated. From ${fmtValue(node.oldData)} to ${fmtValue(node.newData)}`;
         default:
-          if (node.value instanceof Object) {
-            str = getPlain(node.value, fmtKey(node.key, parent));
-          }
+          return getPlain(node.value, fmtKey(node.key, parent));
       }
-      return str;
-    },
-  ).filter((str) => str !== '').join('\n');
+    }).join('\n');
   return result;
 };
 

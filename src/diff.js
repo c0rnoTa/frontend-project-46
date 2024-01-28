@@ -11,8 +11,8 @@ const newNode = (state, key, value) => ({ state, key, value });
 
 const genDiff = (obj1, obj2) => {
   const res = _.entries({ ...obj1, ...obj2 });
-  res.sort();
-  const diff = res.map(([key, value]) => {
+  const sortedRes = _.sortBy(res);
+  const diff = sortedRes.map(([key, value]) => {
     // Был ли добавлен ключ
     if (!(key in obj1)) {
       return newNode(stateAdd, key, (isObject(value) ? genDiff(value, value) : value));
