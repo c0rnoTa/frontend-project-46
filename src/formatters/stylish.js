@@ -1,11 +1,9 @@
 import * as diff from '../diff.js';
 
-// Форматер результата сравнения в Stylish.
-const getStylish = (ast, level = 1) => {
-  const indent = ' ';
-  const indentCount = 4;
+const indent = ' ';
+const indentCount = 4;
 
-  // Форматирует строку с отступами текущего уровня вложенности и спецсиволом.
+const getStylish = (ast, level = 1) => {
   const fmtString = (node, lvl, char = ' ', attr = 'value') => {
     let result = '';
     result += `${indent.repeat(indentCount * lvl - 2)}${char} ${node.key}: `;
@@ -24,9 +22,7 @@ const getStylish = (ast, level = 1) => {
           str = fmtString(node, level, '-');
           break;
         case diff.stateChanged:
-          str = fmtString(node, level, '-', 'oldData');
-          str += '\n';
-          str += fmtString(node, level, '+', 'newData');
+          str = `${fmtString(node, level, '-', 'oldData')}\n${fmtString(node, level, '+', 'newData')}`;
           break;
         default:
           str = fmtString(node, level);
