@@ -64,3 +64,13 @@ test('Diff nested files in plain output', () => {
   ast = genDiff(obj1, obj2);
   expect(formatter(ast)).toEqual(result);
 });
+
+test('Diff nested files in JSON output', () => {
+  obj1 = parseFileToObject('file1.yaml');
+  obj2 = parseFileToObject('file2.json');
+  result = readFileSync(getFixturePath('result_nested.json')).toString();
+  const formatter = getFormatter('json');
+
+  ast = genDiff(obj1, obj2);
+  expect(formatter(ast)).toEqual(result);
+});
