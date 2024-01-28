@@ -4,8 +4,7 @@ import { readFileSync } from 'fs';
 
 import parseToObject from '../src/parser.js';
 import { genDiff } from '../src/diff.js';
-import getStylish from '../src/formaters/stylish.js';
-import getPlain from '../src/formaters/plain.js';
+import getFormatter from '../src/formatters/index.js';
 
 let obj1 = {};
 let obj2 = {};
@@ -20,45 +19,48 @@ const parseFileToObject = (fixtureName) => parseToObject(getFixturePath(fixtureN
 test('Diff flat JSON files in stylish output', () => {
   obj1 = parseFileToObject('obj1.json');
   obj2 = parseFileToObject('obj2.json');
-
   result = readFileSync(getFixturePath('result_flat.stylish')).toString();
+  const formatter = getFormatter('stylish');
   ast = genDiff(obj1, obj2);
-  expect(getStylish(ast)).toEqual(result);
+  expect(formatter(ast)).toEqual(result);
 });
 
 test('Diff flat YAML files in stylish output', () => {
   obj1 = parseFileToObject('obj1.yaml');
   obj2 = parseFileToObject('obj2.yml');
-
   result = readFileSync(getFixturePath('result_flat.stylish')).toString();
-  ast = genDiff(obj1, obj2);
+  const formatter = getFormatter('stylish');
 
-  expect(getStylish(ast)).toEqual(result);
+  ast = genDiff(obj1, obj2);
+  expect(formatter(ast)).toEqual(result);
 });
 
 test('Diff nested JSON files in stylish output', () => {
   obj1 = parseFileToObject('file1.json');
   obj2 = parseFileToObject('file2.json');
-
   result = readFileSync(getFixturePath('result_nested.stylish')).toString();
+  const formatter = getFormatter('stylish');
+
   ast = genDiff(obj1, obj2);
-  expect(getStylish(ast)).toEqual(result);
+  expect(formatter(ast)).toEqual(result);
 });
 
 test('Diff nested YAML files in stylish output', () => {
   obj1 = parseFileToObject('file1.yaml');
   obj2 = parseFileToObject('file2.yml');
-
   result = readFileSync(getFixturePath('result_nested.stylish')).toString();
+  const formatter = getFormatter('stylish');
+
   ast = genDiff(obj1, obj2);
-  expect(getStylish(ast)).toEqual(result);
+  expect(formatter(ast)).toEqual(result);
 });
 
 test('Diff nested files in plain output', () => {
   obj1 = parseFileToObject('file1.yaml');
   obj2 = parseFileToObject('file2.json');
-
   result = readFileSync(getFixturePath('result_nested.plain')).toString();
+  const formatter = getFormatter('plain');
+
   ast = genDiff(obj1, obj2);
-  expect(getPlain(ast)).toEqual(result);
+  expect(formatter(ast)).toEqual(result);
 });
