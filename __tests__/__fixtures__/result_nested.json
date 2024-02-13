@@ -1,6 +1,6 @@
 [
   {
-    "state": "unchanged",
+    "state": "nested",
     "key": "common",
     "value": [
       {
@@ -41,11 +41,11 @@
         ]
       },
       {
-        "state": "unchanged",
+        "state": "nested",
         "key": "setting6",
         "value": [
           {
-            "state": "unchanged",
+            "state": "nested",
             "key": "doge",
             "value": [
               {
@@ -71,7 +71,7 @@
     ]
   },
   {
-    "state": "unchanged",
+    "state": "nested",
     "key": "group1",
     "value": [
       {

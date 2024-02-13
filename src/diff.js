@@ -5,6 +5,7 @@ const stateAdd = 'added';
 const stateRemove = 'remove';
 const stateUnchanged = 'unchanged';
 const stateChanged = 'changed';
+const stateNested = 'nested';
 
 const isObject = (value) => value instanceof Object;
 const newNode = (state, key, value) => ({ state, key, value });
@@ -28,12 +29,12 @@ const genDiff = (obj1, obj2) => {
   const sortedKeys = _.sortBy([...uniqKeys]);
 
   const diff = sortedKeys.map((key) => {
-    // Был ли добавлен ключ
+    // Ключ был добавлен
     if (!(key in obj1)) {
       const value = obj2[key];
       return newNode(stateAdd, key, (isObject(value) ? newNestedValue(value) : value));
     }
-    // Был ли удалён ключ
+    // Ключ был удалён
     if (!(key in obj2)) {
       const value = obj1[key];
       return newNode(stateRemove, key, (isObject(value) ? newNestedValue(value) : value));
@@ -41,7 +42,7 @@ const genDiff = (obj1, obj2) => {
 
     // Ключ есть в исходном и в целевом объекте
     if (isObject(obj1[key]) && isObject(obj2[key])) {
-      return newNode(stateUnchanged, key, genDiff(obj1[key], obj2[key]));
+      return newNode(stateNested, key, genDiff(obj1[key], obj2[key]));
     }
 
     // Изменился тип ключа или его значение
@@ -67,6 +68,7 @@ export {
   stateRemove,
   stateUnchanged,
   stateChanged,
+  stateNested,
 };
 
 export default genDiff;
