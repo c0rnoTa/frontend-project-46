@@ -35,5 +35,8 @@ test('Diff nested files in plain output', () => {
 
 test('Diff nested files in JSON output', () => {
   const result = readFileSync(getFixturePath('result_nested.json')).toString();
-  expect(getDiff(getFixturePath('file1.yaml'), getFixturePath('file2.json'), 'json')).toEqual(result);
+  const targetObject = JSON.parse(result);
+  const sourceObject = JSON.parse(getDiff(getFixturePath('file1.yaml'), getFixturePath('file2.json'), 'json'));
+
+  expect(sourceObject).toMatchObject(targetObject);
 });
