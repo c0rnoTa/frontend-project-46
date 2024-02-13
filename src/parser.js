@@ -1,20 +1,17 @@
 import yaml from 'js-yaml';
 
-import * as file from './files.js';
-
 // Парсеры контента в объект.
-const parseJsonFile = (filepath) => JSON.parse(file.getContent(filepath));
-const parseYamlFile = (filepath) => yaml.load(file.getContent(filepath));
+const parseJson = (data) => JSON.parse(data);
+const parseYaml = (data) => yaml.load(data);
 
 // Читает файл и возвращает контент в виде объекта.
-export default (filepath) => {
-  const fileType = file.getType(filepath);
-  switch (fileType) {
+export default (data, dataType) => {
+  switch (dataType) {
     case 'JSON':
-      return parseJsonFile(filepath);
+      return parseJson(data);
     case 'YAML':
-      return parseYamlFile(filepath);
+      return parseYaml(data);
     default:
-      throw new Error(`File type ${fileType} is unsupported by parser!`);
+      throw new Error(`Data type ${dataType} is unsupported by parser!`);
   }
 };
