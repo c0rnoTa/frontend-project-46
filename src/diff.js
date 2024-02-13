@@ -9,17 +9,34 @@ const stateChanged = 'changed';
 const isObject = (value) => value instanceof Object;
 const newNode = (state, key, value) => ({ state, key, value });
 
+const newNestedValue = (obj) => {
+  const keys = Object.keys(obj);
+  const sortedKeys = _.sortBy(keys);
+  return sortedKeys.map((key) => {
+    if (isObject(obj[key])) {
+      return newNode(stateUnchanged, key, newNestedValue(obj[key]));
+    }
+    return newNode(stateUnchanged, key, obj[key]);
+  });
+};
+
 const genDiff = (obj1, obj2) => {
-  const res = _.entries({ ...obj1, ...obj2 });
-  const sortedRes = _.sortBy(res);
-  const diff = sortedRes.map(([key, value]) => {
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  const uniqKeys = Array.from(new Set(keys1.concat(keys2)));
+  const sortedKeys = _.sortBy([...uniqKeys]);
+
+  const diff = sortedKeys.map((key) => {
     // Был ли добавлен ключ
     if (!(key in obj1)) {
-      return newNode(stateAdd, key, (isObject(value) ? genDiff(value, value) : value));
+      const value = obj2[key];
+      return newNode(stateAdd, key, (isObject(value) ? newNestedValue(value) : value));
     }
     // Был ли удалён ключ
     if (!(key in obj2)) {
-      return newNode(stateRemove, key, (isObject(value) ? genDiff(value, value) : value));
+      const value = obj1[key];
+      return newNode(stateRemove, key, (isObject(value) ? newNestedValue(value) : value));
     }
 
     // Ключ есть в исходном и в целевом объекте
@@ -34,13 +51,13 @@ const genDiff = (obj1, obj2) => {
       return {
         state: stateChanged,
         key,
-        oldData: (isObject(beforeValue) ? genDiff(beforeValue, beforeValue) : beforeValue),
-        newData: (isObject(afterValue) ? genDiff(afterValue, afterValue) : afterValue),
+        oldData: (isObject(beforeValue) ? newNestedValue(beforeValue) : beforeValue),
+        newData: (isObject(afterValue) ? newNestedValue(afterValue) : afterValue),
       };
     }
 
     // Ключ не объект и его значние не изменилось
-    return newNode(stateUnchanged, key, value);
+    return newNode(stateUnchanged, key, obj1[key]);
   });
   return diff;
 };
