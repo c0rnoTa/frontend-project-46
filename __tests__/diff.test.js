@@ -6,7 +6,7 @@ import getDiff from '../src/index.js';
 
 // по-моему какая-то дичь, а что за import.meta.dirname ?
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 
 test('Diff flat JSON files in stylish output', () => {
   const result = readFileSync(getFixturePath('result_flat.stylish')).toString();
