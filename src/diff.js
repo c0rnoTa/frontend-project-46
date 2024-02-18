@@ -7,7 +7,7 @@ const stateUnchanged = 'unchanged';
 const stateChanged = 'changed';
 const stateNested = 'nested';
 
-const isObject = (value) => value instanceof Object;
+const isObject = (value) => _.isObject(value) && !_.isArray(value);
 const newNode = (state, key, value) => ({ state, key, value });
 
 const newNestedValue = (obj) => {
