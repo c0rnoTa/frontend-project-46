@@ -40,3 +40,8 @@ test('Diff nested files in JSON output', () => {
 
   expect(sourceObject).toMatchObject(targetObject);
 });
+
+test('Diff array in plain output', () => {
+  const result = readFileSync(getFixturePath('result_array.plain')).toString();
+  expect(getDiff(getFixturePath('file3.yml'), getFixturePath('file4.yml'), 'plain')).toEqual(result);
+});
