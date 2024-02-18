@@ -1,0 +1,10 @@
+{
+    "sameSimple": 1,
+    "addedComplex": [
+        "a",
+        {
+            "unsorted": "foo",
+            "object": "bar"
+        }
+    ]
+}

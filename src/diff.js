@@ -29,12 +29,12 @@ const genDiff = (obj1, obj2) => {
     // Ключ был добавлен
     if (!(key in obj1)) {
       const value = obj2[key];
-      return newNode(stateAdd, key, (isObject(value) ? newNestedValue(value) : value));
+      return newNode(stateAdd, key, value);
     }
     // Ключ был удалён
     if (!(key in obj2)) {
       const value = obj1[key];
-      return newNode(stateRemove, key, (isObject(value) ? newNestedValue(value) : value));
+      return newNode(stateRemove, key, value);
     }
 
     // Ключ есть в исходном и в целевом объекте
@@ -49,8 +49,8 @@ const genDiff = (obj1, obj2) => {
       return {
         state: stateChanged,
         key,
-        oldData: (isObject(beforeValue) ? newNestedValue(beforeValue) : beforeValue),
-        newData: (isObject(afterValue) ? newNestedValue(afterValue) : afterValue),
+        oldData: beforeValue,
+        newData: afterValue,
       };
     }
 
