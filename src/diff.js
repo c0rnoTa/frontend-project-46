@@ -22,11 +22,8 @@ const newNestedValue = (obj) => {
 };
 
 const genDiff = (obj1, obj2) => {
-  const keys1 = Object.keys(obj1);
-  const keys2 = Object.keys(obj2);
-
-  const uniqKeys = Array.from(new Set(keys1.concat(keys2)));
-  const sortedKeys = _.sortBy([...uniqKeys]);
+  const uniqKeys = _.union(_.keys(obj1), _.keys(obj2));
+  const sortedKeys = _.sortBy(uniqKeys);
 
   const diff = sortedKeys.map((key) => {
     // Ключ был добавлен
