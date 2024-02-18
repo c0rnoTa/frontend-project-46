@@ -11,7 +11,7 @@ const getDiff = (filepath1, filepath2, format = 'stylish') => {
   const object1 = parseToObject(fileContent1, fileType1);
   const object2 = parseToObject(fileContent2, fileType2);
   const ast = genDiff(object1, object2);
-  return formatter[format](ast);
+  return formatter(ast, format);
 };
 
 export default getDiff;
