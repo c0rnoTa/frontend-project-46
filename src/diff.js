@@ -7,20 +7,6 @@ const stateUnchanged = 'unchanged';
 const stateChanged = 'changed';
 const stateNested = 'nested';
 
-const isObject = (value) => _.isObject(value) && !_.isArray(value);
-const newNode = (state, key, value) => ({ state, key, value });
-
-const newNestedValue = (obj) => {
-  const keys = Object.keys(obj);
-  const sortedKeys = _.sortBy(keys);
-  return sortedKeys.map((key) => {
-    if (isObject(obj[key])) {
-      return newNode(stateUnchanged, key, newNestedValue(obj[key]));
-    }
-    return newNode(stateUnchanged, key, obj[key]);
-  });
-};
-
 const genDiff = (obj1, obj2) => {
   const uniqKeys = _.union(_.keys(obj1), _.keys(obj2));
   const sortedKeys = _.sortBy(uniqKeys);
@@ -29,21 +15,21 @@ const genDiff = (obj1, obj2) => {
     // Ключ был добавлен
     if (!(key in obj1)) {
       const value = obj2[key];
-      return newNode(stateAdd, key, value);
+      return { state: stateAdd, key, value };
     }
     // Ключ был удалён
     if (!(key in obj2)) {
       const value = obj1[key];
-      return newNode(stateRemove, key, value);
+      return { state: stateRemove, key, value };
     }
 
-    // Ключ есть в исходном и в целевом объекте
-    if (isObject(obj1[key]) && isObject(obj2[key])) {
-      return newNode(stateNested, key, genDiff(obj1[key], obj2[key]));
+    // Ключ и в исходном и в целевом объекте является объектом
+    if (_.isPlainObject(obj1[key]) && _.isPlainObject(obj2[key])) {
+      return { state: stateNested, key, children: genDiff(obj1[key], obj2[key]) };
     }
 
-    // Изменился тип ключа или его значение
-    if (obj1[key] !== obj2[key]) {
+    // Ключ и в исходном и в целевом объекте
+    if (!_.isEqual(obj1[key], obj2[key])) {
       const beforeValue = obj1[key];
       const afterValue = obj2[key];
       return {
@@ -54,8 +40,8 @@ const genDiff = (obj1, obj2) => {
       };
     }
 
-    // Ключ не объект и его значние не изменилось
-    return newNode(stateUnchanged, key, obj1[key]);
+    // Значение ключа не изменилось
+    return { state: stateUnchanged, key, value: obj1[key] };
   });
   return diff;
 };
