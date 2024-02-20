@@ -2,7 +2,7 @@
   {
     "state": "nested",
     "key": "common",
-    "value": [
+    "children": [
       {
         "state": "added",
         "key": "follow",
@@ -32,22 +32,18 @@
       {
         "state": "added",
         "key": "setting5",
-        "value": [
-          {
-            "state": "unchanged",
-            "key": "key5",
-            "value": "value5"
-          }
-        ]
+        "value": {
+          "key5": "value5"
+        }
       },
       {
         "state": "nested",
         "key": "setting6",
-        "value": [
+        "children": [
           {
             "state": "nested",
             "key": "doge",
-            "value": [
+            "children": [
               {
                 "state": "changed",
                 "key": "wow",
@@ -73,7 +69,7 @@
   {
     "state": "nested",
     "key": "group1",
-    "value": [
+    "children": [
       {
         "state": "changed",
         "key": "baz",
@@ -88,13 +84,9 @@
       {
         "state": "changed",
         "key": "nest",
-        "oldData": [
-          {
-            "state": "unchanged",
-            "key": "key",
-            "value": "value"
-          }
-        ],
+        "oldData": {
+          "key": "value"
+        },
         "newData": "str"
       }
     ]
@@ -102,51 +94,23 @@
   {
     "state": "remove",
     "key": "group2",
-    "value": [
-      {
-        "state": "unchanged",
-        "key": "abc",
-        "value": 12345
-      },
-      {
-        "state": "unchanged",
-        "key": "deep",
-        "value": [
-          {
-            "state": "unchanged",
-            "key": "id",
-            "value": 45
-          }
-        ]
+    "value": {
+      "abc": 12345,
+      "deep": {
+        "id": 45
       }
-    ]
+    }
   },
   {
     "state": "added",
     "key": "group3",
-    "value": [
-      {
-        "state": "unchanged",
-        "key": "deep",
-        "value": [
-          {
-            "state": "unchanged",
-            "key": "id",
-            "value": [
-              {
-                "state": "unchanged",
-                "key": "number",
-                "value": 45
-              }
-            ]
-          }
-        ]
+    "value": {
+      "deep": {
+        "id": {
+          "number": 45
+        }
       },
-      {
-        "state": "unchanged",
-        "key": "fee",
-        "value": 100500
-      }
-    ]
+      "fee": 100500
+    }
   }
 ]
